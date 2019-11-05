@@ -28,5 +28,25 @@ void insertionSort(int[], int);
 void mergeSort(int[], int);
 void quickSort(int[], int);
 void randomizedQuickSort(int[], int);
-void hybridQuickSort(intp[], int);
+void hybridQuickSort(int[], int);
 void heapSort(int[], int);
+
+int main(){
+
+  return 0;
+}
+
+void swap(int a[], int i, int j){
+  if (i==j) return;
+  int temp = a[i];
+  a[i] = a[j];
+  a[j] = temp;
+  return;
+}
+
+void insertionSort(int a[], int size){
+  for (int i = 1; i < size; ++i){
+
+  }
+  return;
+}

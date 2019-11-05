@@ -71,7 +71,7 @@ void writeRandomNoDuplicates(int numValues, int numSwaps, const char* filename){
 }
 
 void writeNearSorted(int numValues, const char* filename){
-  writeRandomNoDuplicates(numValues, numValues/10, filename);
+  writeRandomNoDuplicates(numValues, numValues/20, filename);
   return;
 }
 
