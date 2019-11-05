@@ -1,3 +1,9 @@
+/********************************************
+*Author: Gentry Atkinson
+*Date: 5 November, 2019
+*Description: outputs several files of random numbers
+********************************************/
+
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
@@ -32,9 +38,9 @@ int main(){
   writeRandom(LONG, LONG_RANDOM_FILE);
 
   printf("Printing random, no duplicate files...\n");
-  writeRandomNoDuplicates(SHORT, SHORT, SHORT_RANDOM_NO_DUP_FILE);
-  writeRandomNoDuplicates(MEDIUM, MEDIUM, MEDIUM_RANDOM_NO_DUP_FILE);
-  writeRandomNoDuplicates(LONG, LONG, LONG_RANDOM_NO_DUP_FILE);
+  writeRandomNoDuplicates(SHORT, 2*SHORT, SHORT_RANDOM_NO_DUP_FILE);
+  writeRandomNoDuplicates(MEDIUM, 2*MEDIUM, MEDIUM_RANDOM_NO_DUP_FILE);
+  writeRandomNoDuplicates(LONG, 2*LONG, LONG_RANDOM_NO_DUP_FILE);
 
   printf("Printing near sorted files...\n");
   writeNearSorted(SHORT, SHORT_NEAR_SORTED_FILE);
@@ -70,6 +76,7 @@ void writeNearSorted(int numValues, const char* filename){
 }
 
 void swap(int a[], int i, int j){
+  if (i==j) return;
   int temp = a[i];
   a[i] = a[j];
   a[j] = temp;
