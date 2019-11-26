@@ -32,7 +32,6 @@ void quickSort(int[], int);
 void randomizedQuickSort(int[], int);
 void hybridQuickSort(int[], int);
 void heapSort(int[], int);
-//void swap(int[], int, int);
 void print_array(const int[], int);
 void read_array(int[], ifstream&, int);
 
@@ -50,6 +49,13 @@ int main(){
     read_array(short_rand, short_rand_file, SHORT);
     print_array(short_rand, SHORT);
     mergeSort(short_rand, SHORT);
+    print_array(short_rand, SHORT);
+
+    cout << endl << "*************** Quick *****************" << endl;
+    short_rand_file.seekg(0);
+    read_array(short_rand, short_rand_file, SHORT);
+    print_array(short_rand, SHORT);
+    quickSort(short_rand, SHORT);
     print_array(short_rand, SHORT);
   return 0;
 }
@@ -143,5 +149,31 @@ void ms(int a[], int l, int r){
 
 void mergeSort(int a[], int s){
   ms(a, 0, s);
+  return;
+}
+
+int part(int a[], int low, int hi){
+  int pivot = a[hi-1];
+  int small = low -1;
+  //cout << "partition from " << low << " to " << hi << endl;
+  for(int i = low; i < hi; ++i){
+    if (a[i] < pivot){
+      small += 1;
+      swap(a, small, i);
+    }
+  }
+  swap(a, small+1, hi-1);
+  return(small+1);
+}
+void qs(int a[], int low, int hi){
+  if(hi-low > 1){
+    int p = part(a, low, hi);
+    qs(a, low, p);
+    qs(a, p+1, hi);
+  }
+  return;
+}
+void quickSort(int a[], int s){
+  qs(a, 0, s);
   return;
 }
