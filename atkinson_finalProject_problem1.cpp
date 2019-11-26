@@ -23,6 +23,8 @@ const char* LONG_NEAR_SORTED_FILE = "long_near_sorted.txt";
 #include<fstream>
 #include<iostream>
 #include<chrono>
+#include<stdio.h>
+#include<time.h>
 
 using namespace std;
 
@@ -57,9 +59,32 @@ int main(){
     print_array(short_rand, SHORT);
     quickSort(short_rand, SHORT);
     print_array(short_rand, SHORT);
-  return 0;
-}
 
+    cout << endl << "*************** Quick with Randomiztion ************" << endl;
+    short_rand_file.seekg(0);
+    read_array(short_rand, short_rand_file, SHORT);
+    print_array(short_rand, SHORT);
+    randomizedQuickSort(short_rand, SHORT);
+    print_array(short_rand, SHORT);
+
+    cout << endl << "*************** Hybrid Quicksort ************" << endl;
+    short_rand_file.seekg(0);
+    read_array(short_rand, short_rand_file, SHORT);
+    print_array(short_rand, SHORT);
+    hybridQuickSort(short_rand, SHORT);
+    print_array(short_rand, SHORT);
+
+    cout << endl << "*************** Heapsort ***************" << endl;
+    short_rand_file.seekg(0);
+    read_array(short_rand, short_rand_file, SHORT);
+    print_array(short_rand, SHORT);
+    heapSort(short_rand, SHORT);
+    print_array(short_rand, SHORT);
+    return 0;
+}
+/*************************************************************
+A small collection of helper functions
+*************************************************************/
 void swap(int a[], int i, int j){
   if (i==j) return;
   int temp = a[i];
@@ -82,6 +107,9 @@ void read_array(int a[], ifstream& f, int s){
     }
 }
 
+/*************************************************************
+Insertion Sort
+*************************************************************/
 void insertionSort(int a[], int size){
   for (int i = 1; i < size; ++i){
         int j = i - 1, compare = a[i];
@@ -94,6 +122,9 @@ void insertionSort(int a[], int size){
   return;
 }
 
+/*************************************************************
+Merge Sort
+*************************************************************/
 void merge(int a[], int l, int m, int r){
   int left_size = m-l;
   int right_size = r-m;
@@ -152,11 +183,13 @@ void mergeSort(int a[], int s){
   return;
 }
 
+/*************************************************************
+Quick Sort
+*************************************************************/
 int part(int a[], int low, int hi){
   int pivot = a[hi-1];
   int small = low -1;
-  //cout << "partition from " << low << " to " << hi << endl;
-  for(int i = low; i < hi; ++i){
+  for(int i = low; i < hi-1; ++i){
     if (a[i] < pivot){
       small += 1;
       swap(a, small, i);
@@ -175,5 +208,84 @@ void qs(int a[], int low, int hi){
 }
 void quickSort(int a[], int s){
   qs(a, 0, s);
+  return;
+}
+
+/*************************************************************
+Quick Sort with Randomization
+*************************************************************/
+void qs_r(int a[], int low, int hi){
+  if(hi-low > 1){
+    int array_size = hi-low;
+    swap(a, low+rand()%array_size, hi-1);
+    int p = part(a, low, hi);
+    qs_r(a, low, p);
+    qs_r(a, p+1, hi);
+  }
+  return;
+}
+void randomizedQuickSort(int a[], int s){
+  srand(time(NULL));
+  qs_r(a, 0, s);
+  return;
+}
+
+/*************************************************************
+Quick Sort with Hybridization
+*************************************************************/
+
+void qs_h(int a[], int low, int hi, int threshold){
+  if(hi-low > threshold){
+    int array_size = hi-low;
+    swap(a, low+rand()%array_size, hi-1);
+    int p = part(a, low, hi);
+    qs_r(a, low, p);
+    qs_r(a, p+1, hi);
+  }
+  else{
+    insertionSort(a+low, hi);
+  }
+  return;
+}
+void hybridQuickSort(int a[], int s){
+  qs_h(a, 0, s, 10);
+  return;
+}
+
+/*************************************************************
+Heapsort
+*************************************************************/
+int lchild(int i){
+  return 2*i + 1;
+}
+int rchild(int i){
+  return 2*i + 2;
+}
+int parent(int i){
+  return i/2;
+}
+void heapify(int a[], int s, int root){
+  int left = lchild(root);
+  int right = rchild(root);
+  int largest = root;
+  if(left<s && a[left] > a[largest]){
+    largest = left;
+  }
+  if(right<s && a[right] >a[largest]){
+    largest = right;
+  }
+  if(largest != root){
+    swap(a, root, largest);
+    heapify(a, s, largest);
+  }
+}
+void heapSort(int a[], int s){
+  for(int i = parent(s-1); i>=0; --i){
+    heapify(a, s, i);
+  }
+  for(int i = s-1; i>= 0; --i){
+    swap(a, 0, i);
+    heapify(a, i, 0);
+  }
   return;
 }
