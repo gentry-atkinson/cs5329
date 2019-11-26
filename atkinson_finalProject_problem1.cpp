@@ -36,10 +36,11 @@ void hybridQuickSort(int[], int);
 void heapSort(int[], int);
 void print_array(const int[], int);
 void read_array(int[], ifstream&, int);
+void check_array(int[], int);
 
 int main(){
     int short_rand[SHORT];
-    ifstream short_rand_file(SHORT_RANDOM_FILE);
+    ifstream short_rand_file(SHORT_RANDOM_NO_DUP_FILE);
     cout << "*************** Insertion *****************" << endl;
     read_array(short_rand, short_rand_file, SHORT);
     print_array(short_rand, SHORT);
@@ -105,6 +106,13 @@ void read_array(int a[], ifstream& f, int s){
     for (int i = 0; i < s; ++i){
         f >> a[i];
     }
+}
+
+void check_array(int a[], int s){
+  for(int i = 1; i < s; ++i){
+    if (a[i] < a[i-1]) return false;
+  }
+  return true;
 }
 
 /*************************************************************
