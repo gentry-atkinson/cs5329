@@ -89,7 +89,6 @@ void insertionSort(int a[], int size){
 }
 
 void merge(int a[], int l, int m, int r){
-  //cout << "Merge from " << l << " to " << m << " to " << r << endl;
   int left_size = m-l;
   int right_size = r-m;
   if(left_size == 0 || right_size == 0){
@@ -100,18 +99,14 @@ void merge(int a[], int l, int m, int r){
   int lp = l;
   for(int i = 0; i<left_size; ++i, ++lp){
     left_array[i] = a[lp];
-    cout << left_array[i] << " ";
   }
-  cout << endl;
   int rp = m;
   for(int i = 0; i<right_size; ++i, ++rp){
     right_array[i] = a[rp];
-    cout << right_array[i] << " ";
   }
-  cout << endl;
   lp = 0;
   rp = 0;
-  int ap = 0;
+  int ap = l;
   while(lp<left_size && rp<right_size){
     if(left_array[lp]<right_array[rp]){
       a[ap] = left_array[lp];
@@ -137,15 +132,12 @@ void merge(int a[], int l, int m, int r){
 }
 
 void ms(int a[], int l, int r){
-  //cout << "ms" << endl;
-  if(r-l > 1){
+  if(r-l>1){
     int middle = (l+r)/2;
-    //cout << l << " " << middle << " " << r << endl;
     ms(a, l, middle);
     ms(a, middle, r);
     merge(a, l, middle, r);
   }
-  //print_array(a+l, r-l);
   return;
 }
 
