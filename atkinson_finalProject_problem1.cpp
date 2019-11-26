@@ -27,6 +27,7 @@ const char* LONG_NEAR_SORTED_FILE = "long_near_sorted.txt";
 #include<time.h>
 
 using namespace std;
+using namespace std::chrono;
 
 void insertionSort(int[], int);
 void mergeSort(int[], int);
@@ -35,52 +36,104 @@ void randomizedQuickSort(int[], int);
 void hybridQuickSort(int[], int);
 void heapSort(int[], int);
 void print_array(const int[], int);
-void read_array(int[], ifstream&, int);
-void check_array(int[], int);
+void read_array(int[], const char*, int);
+bool check_array(int[], int);
 
 int main(){
-    int short_rand[SHORT];
-    ifstream short_rand_file(SHORT_RANDOM_NO_DUP_FILE);
-    cout << "*************** Insertion *****************" << endl;
-    read_array(short_rand, short_rand_file, SHORT);
-    print_array(short_rand, SHORT);
-    insertionSort(short_rand, SHORT);
-    print_array(short_rand, SHORT);
+    int short_array[SHORT];
+    int med_array[MEDIUM];
+    int long_array[LONG];
+    //short_rand_file.seekg(0);
 
-    cout << endl << "*************** Merge *****************" << endl;
-    short_rand_file.seekg(0);
-    read_array(short_rand, short_rand_file, SHORT);
-    print_array(short_rand, SHORT);
-    mergeSort(short_rand, SHORT);
-    print_array(short_rand, SHORT);
+    //Timing Insertion Sort
+    cout << "***********************Insertion Sort*********************" << endl;
+    cout << "Loading Random Arrays" << endl;
+    read_array(short_array, SHORT_RANDOM_FILE, SHORT);
+    read_array(med_array, MEDIUM_RANDOM_FILE, MEDIUM);
+    read_array(long_array, LONG_RANDOM_FILE, LONG);
+    cout << "Sorting Random Arrays" << endl;
 
-    cout << endl << "*************** Quick *****************" << endl;
-    short_rand_file.seekg(0);
-    read_array(short_rand, short_rand_file, SHORT);
-    print_array(short_rand, SHORT);
-    quickSort(short_rand, SHORT);
-    print_array(short_rand, SHORT);
+    auto start_short = high_resolution_clock::now();
+    insertionSort(short_array, SHORT);
+    auto stop_short = high_resolution_clock::now();
+	  auto duration_short = duration_cast<microseconds>(stop_short - start_short);
+    if(check_array(short_array, SHORT)){
+      cout << "Good sort on short array." << endl;
+    }
+    else{
+      cout << "Bad sort on short array." << endl;
+    }
 
-    cout << endl << "*************** Quick with Randomiztion ************" << endl;
-    short_rand_file.seekg(0);
-    read_array(short_rand, short_rand_file, SHORT);
-    print_array(short_rand, SHORT);
-    randomizedQuickSort(short_rand, SHORT);
-    print_array(short_rand, SHORT);
+    auto start_med = high_resolution_clock::now();
+    insertionSort(med_array, MEDIUM);
+    auto stop_med = high_resolution_clock::now();
+	  auto duration_med = duration_cast<microseconds>(stop_med - start_med);
+    if(check_array(med_array, MEDIUM)){
+      cout << "Good sort on medium array." << endl;
+    }
+    else{
+      cout << "Bad sort on medium array." << endl;
+    }
 
-    cout << endl << "*************** Hybrid Quicksort ************" << endl;
-    short_rand_file.seekg(0);
-    read_array(short_rand, short_rand_file, SHORT);
-    print_array(short_rand, SHORT);
-    hybridQuickSort(short_rand, SHORT);
-    print_array(short_rand, SHORT);
+    auto start_long = high_resolution_clock::now();
+    insertionSort(long_array, LONG);
+    auto stop_long = high_resolution_clock::now();
+	  auto duration_long = duration_cast<microseconds>(stop_long - start_long);
+    if(check_array(long_array, MEDIUM)){
+      cout << "Good sort on long array." << endl;
+    }
+    else{
+      cout << "Bad sort on long array." << endl;
+    }
+    cout << "Time to sort short: " << duration_short.count() << "ms" << endl;
+    cout << "Time to sort medium: " << duration_med.count() << "ms" << endl;
+    cout << "Time to sort long: " << duration_long.count() << "ms" << endl;
+    cout << "------------------------------------------" << endl;
 
-    cout << endl << "*************** Heapsort ***************" << endl;
-    short_rand_file.seekg(0);
-    read_array(short_rand, short_rand_file, SHORT);
-    print_array(short_rand, SHORT);
-    heapSort(short_rand, SHORT);
-    print_array(short_rand, SHORT);
+    cout << "Loading Random No Duplicate Arrays" << endl;
+    read_array(short_array, SHORT_RANDOM_NO_DUP_FILE, SHORT);
+    read_array(med_array, MEDIUM_RANDOM_NO_DUP_FILE, MEDIUM);
+    read_array(long_array, LONG_RANDOM_NO_DUP_FILE, LONG);
+    cout << "Sorting Random No Duplicate Arrays" << endl;
+
+    start_short = high_resolution_clock::now();
+    insertionSort(short_array, SHORT);
+    stop_short = high_resolution_clock::now();
+	  duration_short = duration_cast<microseconds>(stop_short - start_short);
+    if(check_array(short_array, SHORT)){
+      cout << "Good sort on short array." << endl;
+    }
+    else{
+      cout << "Bad sort on short array." << endl;
+    }
+
+    start_med = high_resolution_clock::now();
+    insertionSort(med_array, MEDIUM);
+    stop_med = high_resolution_clock::now();
+	  duration_med = duration_cast<microseconds>(stop_med - start_med);
+    if(check_array(med_array, MEDIUM)){
+      cout << "Good sort on medium array." << endl;
+    }
+    else{
+      cout << "Bad sort on medium array." << endl;
+    }
+
+    start_long = high_resolution_clock::now();
+    insertionSort(long_array, LONG);
+    stop_long = high_resolution_clock::now();
+	  duration_long = duration_cast<microseconds>(stop_long - start_long);
+    if(check_array(long_array, MEDIUM)){
+      cout << "Good sort on long array." << endl;
+    }
+    else{
+      cout << "Bad sort on long array." << endl;
+    }
+    cout << "Time to sort short: " << duration_short.count() << "ms" << endl;
+    cout << "Time to sort medium: " << duration_med.count() << "ms" << endl;
+    cout << "Time to sort long: " << duration_long.count() << "ms" << endl;
+    cout << "------------------------------------------" << endl;
+
+
     return 0;
 }
 /*************************************************************
@@ -102,15 +155,17 @@ void print_array(const int a[], int s){
 }
 
 
-void read_array(int a[], ifstream& f, int s){
+void read_array(int a[], const char* f, int s){
+    ifstream file(f);
     for (int i = 0; i < s; ++i){
-        f >> a[i];
+        file >> a[i];
     }
 }
 
-void check_array(int a[], int s){
+bool check_array(int a[], int s){
   for(int i = 1; i < s; ++i){
-    if (a[i] < a[i-1]) return false;
+    if (a[i] < a[i-1])
+     return false;
   }
   return true;
 }
