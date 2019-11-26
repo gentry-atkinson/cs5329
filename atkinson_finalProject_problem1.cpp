@@ -24,15 +24,33 @@ const char* LONG_NEAR_SORTED_FILE = "long_near_sorted.txt";
 #include<iostream>
 #include<chrono>
 
+using namespace std;
+
 void insertionSort(int[], int);
 void mergeSort(int[], int);
 void quickSort(int[], int);
 void randomizedQuickSort(int[], int);
 void hybridQuickSort(int[], int);
 void heapSort(int[], int);
+//void swap(int[], int, int);
+void print_array(const int[], int);
+void read_array(int[], ifstream&, int);
 
 int main(){
+    int short_rand[SHORT];
+    ifstream short_rand_file(SHORT_RANDOM_FILE);
+    cout << "*************** Insertion *****************" << endl;
+    read_array(short_rand, short_rand_file, SHORT);
+    print_array(short_rand, SHORT);
+    insertionSort(short_rand, SHORT);
+    print_array(short_rand, SHORT);
 
+    cout << endl << "*************** Merge *****************" << endl;
+    short_rand_file.seekg(0);
+    read_array(short_rand, short_rand_file, SHORT);
+    print_array(short_rand, SHORT);
+    mergeSort(short_rand, SHORT);
+    print_array(short_rand, SHORT);
   return 0;
 }
 
@@ -44,9 +62,94 @@ void swap(int a[], int i, int j){
   return;
 }
 
+void print_array(const int a[], int s){
+    for (int i = 0; i < s; ++i){
+        cout << a[i] << " ";
+    }
+    cout << endl;
+}
+
+
+void read_array(int a[], ifstream& f, int s){
+    for (int i = 0; i < s; ++i){
+        f >> a[i];
+    }
+}
+
 void insertionSort(int a[], int size){
   for (int i = 1; i < size; ++i){
-
+        int j = i - 1, compare = a[i];
+        while (j >= 0 && a[j] > compare){
+          a[j+1] = a[j];
+          j -= 1;
+        }
+        a[j+1] = compare;
   }
+  return;
+}
+
+void merge(int a[], int l, int m, int r){
+  //cout << "Merge from " << l << " to " << m << " to " << r << endl;
+  int left_size = m-l;
+  int right_size = r-m;
+  if(left_size == 0 || right_size == 0){
+    cerr << "Size of 0 in merge" << endl;
+  }
+  int left_array[left_size];
+  int right_array[right_size];
+  int lp = l;
+  for(int i = 0; i<left_size; ++i, ++lp){
+    left_array[i] = a[lp];
+    cout << left_array[i] << " ";
+  }
+  cout << endl;
+  int rp = m;
+  for(int i = 0; i<right_size; ++i, ++rp){
+    right_array[i] = a[rp];
+    cout << right_array[i] << " ";
+  }
+  cout << endl;
+  lp = 0;
+  rp = 0;
+  int ap = 0;
+  while(lp<left_size && rp<right_size){
+    if(left_array[lp]<right_array[rp]){
+      a[ap] = left_array[lp];
+      lp++;
+    }
+    else{
+      a[ap] = right_array[rp];
+      rp++;
+    }
+    ap++;
+  }
+  while(lp<left_size){
+    a[ap] = left_array[lp];
+    ap++;
+    lp++;
+  }
+  while(rp<right_size){
+    a[ap] = right_array[rp];
+    ap++;
+    rp++;
+  }
+  return;
+}
+
+void ms(int a[], int l, int r){
+  //cout << "ms" << endl;
+  if(r-l > 1){
+    int middle = (l+r)/2;
+    //cout << l << " " << middle << " " << r << endl;
+    ms(a, l, middle);
+    ms(a, middle, r);
+    merge(a, l, middle, r);
+  }
+  //print_array(a+l, r-l);
+  return;
+}
+
+void mergeSort(int a[], int s){
+  ms(a, 0, s);
   return;
 }
