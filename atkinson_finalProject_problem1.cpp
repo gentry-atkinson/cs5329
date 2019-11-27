@@ -1014,7 +1014,7 @@ void qs_h(int a[], int low, int hi, int threshold){
   return;
 }
 void hybridQuickSort(int a[], int s){
-  qs_h(a, 0, s, 10);
+  qs_h(a, 0, s, 32);
   return;
 }
 
